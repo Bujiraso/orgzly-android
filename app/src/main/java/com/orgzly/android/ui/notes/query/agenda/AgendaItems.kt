@@ -5,6 +5,9 @@ import com.orgzly.android.query.Query
 import com.orgzly.android.query.user.InternalQueryParser
 import com.orgzly.android.util.AgendaUtils
 import org.joda.time.DateTime
+import java.util.Collections
+import kotlin.Comparator
+import kotlin.collections.HashSet
 
 object AgendaItems {
     data class ExpandableOrgRange(val range: String?, val overdueToday: Boolean)
@@ -54,7 +57,6 @@ object AgendaItems {
         val addedPlanningTimes = HashSet<Long>()
 
         notes.forEach { note ->
-
             fun addInstances(timeType: Int, timeString: String?, overdueToday: Boolean) {
                 // Expand each note if it has a repeater or is a range
                 val times = AgendaUtils.expandOrgDateTime(
@@ -86,6 +88,33 @@ object AgendaItems {
             addInstances(3, note.eventString, false)
         }
 
+        sortAgendaItemsByTimestamp(dayBuckets)
         return dayBuckets.values.flatten() // FIXME
+    }
+
+    private fun sortAgendaItemsByTimestamp(dayBuckets: Map<Long, MutableList<AgendaItem>>) {
+        for ((_, value) in dayBuckets) {
+            val ff = Comparator<AgendaItem> { o1, o2 ->
+                val firstIsDivider = o1 is AgendaItem.Divider
+                val secondIsDivider = o2 is AgendaItem.Divider
+                if (firstIsDivider || secondIsDivider) {
+                    return@Comparator if (firstIsDivider && secondIsDivider) 0 else -1
+                }
+
+                val firstTimestamp = (o1 as AgendaItem.Note).note.scheduledTimeTimestamp
+                val secondTimestamp = (o2 as AgendaItem.Note).note.scheduledTimeTimestamp
+                val missingFirstTimestamp = firstTimestamp == null
+                val missingSecondTimestamp = secondTimestamp == null
+                if (missingFirstTimestamp || missingSecondTimestamp) {
+                    return@Comparator if (missingFirstTimestamp && missingSecondTimestamp) 0 else -1
+                }
+                if (firstTimestamp == secondTimestamp) {
+                    0
+                } else {
+                    if (firstTimestamp!! < secondTimestamp!!) -1 else 1
+                }
+            }
+            Collections.sort(value, ff)
+        }
     }
 }

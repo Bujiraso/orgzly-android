@@ -6,6 +6,7 @@ import com.orgzly.android.query.*
 import com.orgzly.android.reminders.*
 import com.orgzly.android.repos.*
 import com.orgzly.android.ui.*
+import com.orgzly.android.ui.notes.query.agenda.AgendaItemsTest
 import com.orgzly.android.uiautomator.ListWidgetTest
 import com.orgzly.android.usecase.*
 import com.orgzly.android.util.*
@@ -16,6 +17,7 @@ import org.junit.runners.Suite
 @Ignore("Test suite")
 @RunWith(Suite::class)
 @Suite.SuiteClasses(
+        // tests for com.orgzly.android.espresso
         ActionModeTest::class,
         AgendaFragmentTest::class,
         BookChooserActivityTest::class,
@@ -38,6 +40,7 @@ import org.junit.runners.Suite
         ShareActivityTest::class,
         SyncingTest::class,
 
+        // tests for com.orgzly.android.misc
         BookNameTest::class,
         BookParsingTest::class,
         CreatedAtPropertyTest::class,
@@ -47,12 +50,15 @@ import org.junit.runners.Suite
         StructureTest::class,
         UriTest::class,
 
+        // tests for com.orgzly.android.query
         QueryTest::class,
         QueryTokenizerTest::class,
         QueryUtilsTest::class,
 
+        // tests for com.orgzly.android.reminders
         ReminderServiceTest::class,
 
+        // tests for com.orgzly.android.repos
         DataRepositoryTest::class,
         DirectoryRepoTest::class,
         DropboxRepoTest::class,
@@ -60,13 +66,17 @@ import org.junit.runners.Suite
         RepoFactoryTest::class,
         SyncTest::class,
 
+        // tests for com.orgzly.android.ui
         ImageLoaderTest::class,
 
+        // tests for com.orgzly.android.uiautomator
         ListWidgetTest::class,
 
+        // tests for com.orgzly.android.usecase
         NoteUpdateDeadlineTimeTest::class,
         NoteUpdateScheduledTimeTest::class,
 
+        // tests for com.orgzly.android.util
         AgendaUtilsTest::class,
         EncodingDetectTest::class,
         MiscUtilsTest::class,
@@ -74,5 +84,9 @@ import org.junit.runners.Suite
         OrgFormatterMiscTest::class,
         OrgFormatterSpeedTest::class,
         OrgFormatterStyleTextTest::class,
-        UriUtilsTest::class)
+        UriUtilsTest::class,
+
+        // tests for com.orgzly.android.ui.notes.query.agenda
+        AgendaItemsTest::class
+)
 class AllTestSuite
